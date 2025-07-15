@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LyricFlow | Your Favorite Songs</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles to apply the Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style for the lyrics container to have a subtle scrollbar */
+        #lyrics-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #lyrics-container::-webkit-scrollbar-track {
+            background: #1f2937; /* dark-gray */
+        }
+        #lyrics-container::-webkit-scrollbar-thumb {
+            background-color: #4b5563; /* medium-gray */
+            border-radius: 20px;
+            border: 3px solid #1f2937; /* dark-gray */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
+
+    <div class="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Header Section -->
+        <header class="p-6 bg-gray-900/50 border-b border-gray-700">
+            <h1 id="song-title" class="text-3xl sm:text-4xl font-bold text-white text-center tracking-tight">Song Title</h1>
+            <p id="song-artist" class="text-lg sm:text-xl text-center text-stone-400 mt-1">Artist Name</p>
+        </header>
+
+        <!-- Lyrics Display Section -->
+        <main id="lyrics-container" class="p-6 sm:p-8 h-96 overflow-y-auto">
+            <div id="lyrics-content" class="text-lg leading-loose space-y-4 font-medium">
+                <!-- Lyrics will be dynamically inserted here -->
+            </div>
+        </main>
+
+        <!-- Song Selection Footer -->
+        <footer class="p-4 bg-gray-900/50 border-t border-gray-700">
+            <h2 class="text-center text-sm font-bold uppercase text-gray-400 mb-3">Select a Song</h2>
+            <div id="song-selection" class="flex flex-wrap justify-center gap-2">
+                <!-- Song selection buttons will be dynamically inserted here -->
+            </div>
+        </footer>
+
+    </div>
+    
+    <p class="text-center text-gray-500 mt-8 text-sm">
+        Created with ❤️. Ready to be published on GitHub.
+    </p>
+
+    <script>
+        // --- DATA: Song Database ---
+        // You can easily add more songs here. Just follow the format.
+        const songs = [
+            {
+                title: "Open the Eyes of My Heart",
+                artist: "Paul Baloche",
+                lyrics: [
+                    "[Verse 1]",
+                    "Open the eyes of my heart, Lord",
+                    "Open the eyes of my heart",
+                    "I want to see You",
+                    "I want to see You",
+                    "",
+                    "[Verse 2]",
+                    "Open the eyes of my heart, Lord",
+                    "Open the eyes of my heart",
+                    "I want to see You",
+                    "I want to see You",
+                    "",
+                    "[Chorus]",
+                    "To see You high and lifted up",
+                    "Shinin' in the light of Your glory",
+                    "Pour out Your power and love",
+                    "As we sing holy, holy, holy",
+                    "",
+                    "[Bridge]",
+                    "Holy, holy, holy",
+                    "We cry holy, holy, holy",
+                    "You are holy, holy, holy",
+                    "I want to see you"
+                ]
+            },
+            {
+                title: "How Great Is Our God",
+                artist: "Chris Tomlin",
+                lyrics: [
+                    "[Verse 1]",
+                    "The splendor of a King, clothed in majesty",
+                    "Let all the Earth rejoice, all the Earth rejoice",
+                    "He wraps himself in light, and darkness tries to hide",
+                    "And trembles at His voice, trembles at His voice",
+                    "",
+                    "[Chorus]",
+                    "How great is our God, sing with me",
+                    "How great is our God, and all will see",
+                    "How great, how great is our God",
+                    "",
+                    "[Verse 2]",
+                    "Age to age He stands, and time is in His hands",
+                    "Beginning and the end, Beginning and the end",
+                    "The Godhead Three in One, Father Spirit Son",
+                    "The Lion and the Lamb, the Lion and the Lamb",
+                    "",
+                    "[Chorus]",
+                    "How great is our God, sing with me",
+                    "How great is our God, and all will see",
+                    "How great, how great is our God",
+                    "",
+                    "[Bridge]",
+                    "Name above all names",
+                    "Worthy of our praise",
+                    "My heart will sing",
+                    "How great is our God"
+                ]
+            },
+            {
+                title: "Holy Spirit",
+                artist: "Bryan & Katie Torwalt",
+                lyrics: [
+                    "[Verse 1]",
+                    "There's nothing worth more, that will ever come close",
+                    "No thing can compare, You're our living hope",
+                    "Your Presence",
+                    "",
+                    "[Verse 2]",
+                    "I've tasted and seen, of the sweetest of Loves",
+                    "Where my heart becomes free, and my shame is undone",
+                    "In Your Presence",
+                    "",
+                    "[Chorus]",
+                    "Holy Spirit You are welcome here",
+                    "Come flood this place and fill the atmosphere",
+                    "Your Glory God is what our hearts long for",
+                    "To be overcome by Your Presence Lord",
+                    "",
+                    "[Bridge]",
+                    "Let us become more aware of Your Presence",
+                    "Let us experience the Glory of Your Goodness"
+                ]
+            },
+            {
+                title: "I Speak Jesus",
+                artist: "Charity Gayle",
+                lyrics: [
+                    "[Verse 1]",
+                    "I just wanna speak the name of Jesus",
+                    "Over every heart and every mind",
+                    "'Cause I know there is peace within Your presence",
+                    "I speak Jesus",
+                    "",
+                    "[Verse 2]",
+                    "I just wanna speak the name of Jesus",
+                    "'Til every dark addiction starts to break",
+                    "Declaring there is hope and there is freedom",
+                    "I speak Jesus",
+                    "",
+                    "[Chorus]",
+                    "'Cause Your name is power",
+                    "Your name is healing",
+                    "Your name is life",
+                    "Break every stronghold",
+                    "Shine through the shadows",
+                    "Burn like a fire",
+                    "",
+                    "[Bridge]",
+                    "Shout Jesus from the mountains",
+                    "Jesus in the streets",
+                    "Jesus in the darkness, over every enemy",
+                    "Jesus for my family",
+                    "I speak the holy name",
+                    "Jesus"
+                ]
+            },
+            {
+                title: "Our Father",
+                artist: "Bethel Music",
+                lyrics: [
+                    "[Verse 1]",
+                    "Our Father in Heaven",
+                    "Hallowed be Your name",
+                    "Your Kingdom come quickly",
+                    "Your will be done the same",
+                    "",
+                    "[Chorus]",
+                    "On Earth as it is in Heaven",
+                    "Let Heaven come to",
+                    "Earth as it is in Heaven",
+                    "Let Heaven come",
+                    "",
+                    "[Bridge]",
+                    "Yours is the Kingdom, Yours is the power",
+                    "Yours is the glory forever, amen",
+                    "Yours is the Kingdom, Yours is the power",
+                    "Yours is the glory forever, amen"
+                ]
+            },
+            {
+                title: "What A Beautiful Name",
+                artist: "Hillsong Worship",
+                lyrics: [
+                    "[Verse 1]",
+                    "You were the Word at the beginning",
+                    "One with God the Lord Most High",
+                    "Your hidden glory in creation",
+                    "Now revealed in You our Christ",
+                    "",
+                    "[Chorus 1]",
+                    "What a beautiful name it is",
+                    "What a beautiful name it is",
+                    "The name of Jesus Christ my King",
+                    "What a beautiful name it is",
+                    "Nothing compares to this",
+                    "What a beautiful name it is",
+                    "The name of Jesus",
+                    "",
+                    "[Verse 2]",
+                    "You didn't want heaven without us",
+                    "So Jesus, You brought heaven down",
+                    "My sin was great, Your love was greater",
+                    "What could separate us now",
+                    "",
+                    "[Chorus 2]",
+                    "What a wonderful name it is",
+                    "What a wonderful name it is",
+                    "The name of Jesus Christ my King",
+                    "What a wonderful name it is",
+                    "Nothing compares to this",
+                    "What a wonderful name it is",
+                    "The name of Jesus",
+                    "",
+                    "[Bridge]",
+                    "Death could not hold You",
+                    "The veil tore before You",
+                    "You silenced the boast, of sin and grave",
+                    "The heavens are roaring the praise of Your glory",
+                    "For You are raised to life again",
+                    "",
+                    "[Bridge 2]",
+                    "You have no rival",
+                    "You have no equal",
+                    "Now and forever, God You reign",
+                    "Yours is the Kingdom",
+                    "Yours is the Glory",
+                    "Yours is the name, above all names",
+                    "",
+                    "[Chorus 3]",
+                    "What a powerful name it is",
+                    "What a powerful name it is",
+                    "The name of Jesus Christ my King",
+                    "What a powerful name it is",
+                    "Nothing can stand against",
+                    "What a powerful name it is",
+                    "The name of Jesus"
+                ]
+            }
+        ];
+
+        // --- DOM Elements ---
+        const songTitleEl = document.getElementById('song-title');
+        const songArtistEl = document.getElementById('song-artist');
+        const lyricsContentEl = document.getElementById('lyrics-content');
+        const songSelectionEl = document.getElementById('song-selection');
+
+        // --- FUNCTIONS ---
+
+        /**
+         * Displays a selected song's title, artist, and lyrics on the page.
+         * @param {number} songIndex - The index of the song in the `songs` array.
+         */
+        function displaySong(songIndex) {
+            const song = songs[songIndex];
+            if (!song) {
+                console.error(`Song with index ${songIndex} not found.`);
+                return;
+            }
+
+            // Update title and artist
+            songTitleEl.textContent = song.title;
+            songArtistEl.textContent = song.artist;
+
+            // Clear previous lyrics and build new content
+            lyricsContentEl.innerHTML = '';
+            song.lyrics.forEach(line => {
+                const p = document.createElement('p');
+                // Make section headers bold and stand out
+                if (line.startsWith('[')) {
+                    p.className = 'font-bold text-stone-400 pt-2';
+                }
+                p.textContent = line || '\u00A0'; // Use a non-breaking space for empty lines to maintain spacing
+                lyricsContentEl.appendChild(p);
+            });
+            
+            // Scroll lyrics container to the top
+            document.getElementById('lyrics-container').scrollTop = 0;
+
+            // Update active button style
+            updateActiveButton(songIndex);
+        }
+
+        /**
+         * Updates the styling of the song selection buttons to show which is active.
+         * @param {number} activeIndex - The index of the currently active song.
+         */
+        function updateActiveButton(activeIndex) {
+            const buttons = songSelectionEl.querySelectorAll('button');
+            buttons.forEach((button, index) => {
+                if (index === activeIndex) {
+                    // Active button style
+                    button.className = 'px-4 py-2 text-sm font-bold text-white bg-stone-500 rounded-full shadow-lg transform scale-105 transition-all';
+                } else {
+                    // Inactive button style
+                    button.className = 'px-4 py-2 text-sm font-bold text-white bg-gray-700 hover:bg-gray-600 rounded-full transition-all';
+                }
+            });
+        }
+
+        /**
+         * Creates the song selection buttons and adds them to the page.
+         */
+        function createSelectionButtons() {
+            songs.forEach((song, index) => {
+                const button = document.createElement('button');
+                button.textContent = song.title;
+                // Set initial class for inactive buttons
+                button.className = 'px-4 py-2 text-sm font-bold text-white bg-gray-700 hover:bg-gray-600 rounded-full transition-all';
+                
+                // Add an event listener to each button
+                button.addEventListener('click', () => {
+                    displaySong(index);
+                });
+                
+                songSelectionEl.appendChild(button);
+            });
+        }
+
+        // --- INITIALIZATION ---
+        // When the page loads, create the buttons and display the first song.
+        window.onload = function() {
+            createSelectionButtons();
+            displaySong(0); // Display the first song by default
+        };
+
+    </script>
+</body>
+</html>
